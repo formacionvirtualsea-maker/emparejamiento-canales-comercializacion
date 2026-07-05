@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Unidad 3 · Comercialización y precios justos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+    <style>
+        /* ---------- RESET + VARIABLES ---------- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            --morado-principal: #9B59B6;
+            --morado-oscuro: #6c3483;
+            --morado-claro: #F4ECF7;
+            --beige: #F5F5DC;
+            --blanco: #FFFFFF;
+            --gris-oscuro: #424242;
+            --amarillo-suave: #FBC02D;
+            --font: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            --verde-exito: #27AE60;
+            --rojo-error: #E74C3C;
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: var(--gris-oscuro);
+            font-family: var(--font);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .presentation-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+            background: var(--beige);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ---------- SPLASH ---------- */
+        .splash {
+            position: absolute;
+            inset: 0;
+            z-index: 9999;
+            background: var(--beige);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+            pointer-events: auto;
+        }
+        .splash.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-button-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .splash-button-bg {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 60px;
+            object-fit: contain;
+        }
+        .splash-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #0A4A2A;
+            color: var(--blanco);
+            border: none;
+            border-radius: 60px;
+            padding: 18px 48px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            transition: background 0.2s;
+            animation: pulse 1.8s infinite;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+        }
+        .splash-btn:hover {
+            background: #0D6B3E;
+        }
+        .splash-btn img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.06);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .splash-button-wrapper {
+                max-width: 380px;
+            }
+            .splash-btn {
+                font-size: 1.2rem;
+                padding: 14px 28px;
+                gap: 8px;
+            }
+            .splash-btn img {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        /* ---------- BOTÓN CERRAR ---------- */
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            z-index: 8000;
+            background: #0A4A2A;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: background 0.2s;
+        }
+        .close-btn:hover {
+            background: #0D6B3E;
+        }
+
+        /* ---------- BARRA DE PROGRESO ---------- */
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 6px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.08);
+            z-index: 7000;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #0A4A2A;
+            transition: width 0.3s ease;
+        }
+
+        /* ---------- SWIPER ---------- */
+        .swiper {
+            width: 100%;
+            height: 100%;
+            background: var(--beige);
+        }
+        .swiper-slide {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 80px 50px 70px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--beige);
+            scroll-behavior: smooth;
+        }
+        .swiper-slide:nth-child(odd) {
+            background: var(--beige);
+        }
+        .swiper-slide:nth-child(even) {
+            background: var(--morado-claro);
+        }
+
+        .swiper-slide h1 {
+            color: var(--morado-oscuro);
+            font-size: 2.6rem;
+            border-bottom: 4px solid var(--morado-principal);
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        .swiper-slide h2 {
+            color: var(--morado-oscuro);
+            font-size: 2rem;
+            margin: 15px 0 10px;
+        }
+        .swiper-slide h3 {
+            color: var(--morado-oscuro);
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+        .swiper-slide p,
+        .swiper-slide li {
+            color: var(--gris-oscuro);
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        .swiper-slide ul,
+        .swiper-slide ol {
+            margin-left: 2rem;
+            margin-top: 12px;
+        }
+        .swiper-slide li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: var(--morado-claro);
+            padding: 20px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin: 18px 0;
+            color: var(--gris-oscuro);
+            border-left: 5px solid var(--morado-principal);
+        }
+
+        /* ---------- TARJETAS INFORMATIVAS ---------- */
+        .info-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .info-card {
+            flex: 1 1 250px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-top: 6px solid var(--morado-principal);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            cursor: default;
+            min-height: 180px;
+        }
+        .info-card h3 {
+            color: var(--morado-oscuro);
+        }
+        .info-card .ejemplo {
+            background: #FFF8E1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--amarillo-suave);
+        }
+
+        /* ---------- ACTIVIDAD DE SELECCIÓN ---------- */
+        .selection-activity {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 15px 0;
+            width: 100%;
+        }
+        .selection-question {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border-left: 5px solid var(--morado-principal);
+            margin-bottom: 10px;
+        }
+        .selection-question p {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--morado-oscuro);
+            margin-bottom: 12px;
+        }
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .option-item {
+            background: var(--morado-principal);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            display: inline-block;
+            border: 3px solid transparent;
+            text-align: center;
+        }
+        .option-item:hover {
+            transform: scale(1.03);
+        }
+        .option-item.selected {
+            border-color: var(--verde-exito);
+            background: var(--verde-exito);
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.3);
+        }
+        .option-item.correct-answer {
+            background: var(--verde-exito);
+            border-color: var(--verde-exito);
+        }
+        .option-item.wrong-answer {
+            background: var(--rojo-error);
+            border-color: var(--rojo-error);
+        }
+        .option-item.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .feedback-message {
+            margin-top: 12px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: none;
+            text-align: center;
+        }
+        .feedback-message.success {
+            display: block;
+            background: #d5f5e3;
+            color: #1a7a42;
+            border-left: 5px solid var(--verde-exito);
+        }
+        .feedback-message.error {
+            display: block;
+            background: #fadbd8;
+            color: #922b21;
+            border-left: 5px solid var(--rojo-error);
+        }
+
+        .btn-verificar {
+            background: var(--morado-principal);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s;
+            align-self: center;
+        }
+        .btn-verificar:hover {
+            background: var(--morado-oscuro);
+        }
+        .btn-verificar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .selection-question.correcta {
+            border-left-color: var(--verde-exito);
+        }
+
+        @media (max-width: 700px) {
+            .swiper-slide {
+                padding: 70px 15px 80px 15px;
+            }
+            .swiper-slide h1 {
+                font-size: 2rem;
+            }
+            .swiper-slide h2 {
+                font-size: 1.5rem;
+            }
+            .option-item {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+            .selection-question {
+                padding: 15px;
+            }
+            .info-card {
+                flex: 1 1 100%;
+                min-height: 140px;
+                padding: 15px;
+            }
+            .info-card h3 {
+                font-size: 1.2rem;
+            }
+            .btn-verificar {
+                font-size: 1rem;
+                padding: 8px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .swiper-slide {
+                padding: 60px 10px 70px 10px;
+            }
+            .option-item {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            .selection-question p {
+                font-size: 0.95rem;
+            }
+            .info-card {
+                padding: 12px;
+            }
+            .info-card .ejemplo {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ---------- NAVEGACIÓN ---------- */
+        .nav-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            z-index: 6000;
+            pointer-events: none;
+        }
+        .nav-bar>* {
+            pointer-events: auto;
+        }
+        .nav-btn {
+            background: var(--morado-principal);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: background 0.2s;
+        }
+        .nav-btn:hover {
+            background: var(--morado-oscuro);
+        }
+        .nav-btn.hidden-btn {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .nav-counter {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: var(--gris-oscuro);
+            backdrop-filter: blur(4px);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: #777;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-wrapper" id="app">
+        <div class="splash" id="splash">
+            <div class="splash-button-wrapper">
+                <img class="splash-button-bg" src="https://www.dropbox.com/scl/fi/dbeq7n5pkl96wtbvvacc2/boton.png?rlkey=phwhgfbwq03x05hlwz0rew9ur&st=l0zaim7a&dl=1" alt="Fondo del botón">
+                <button class="splash-btn" id="startBtn">
+                    <img src="https://www.dropbox.com/scl/fi/dbeq7n5pkl96wtbvvacc2/boton.png?rlkey=phwhgfbwq03x05hlwz0rew9ur&st=l0zaim7a&dl=1" alt="Ver">
+                    INGRESAR
+                </button>
+            </div>
+        </div>
+
+        <button class="close-btn" id="closeBtn">✕ Cerrar</button>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="swiper" id="swiperContainer">
+            <div class="swiper-wrapper">
+                <!-- SLIDE 1: INTRODUCCIÓN -->
+                <div class="swiper-slide">
+                    <h1>Actividad Interactiva</h1>
+                    <h2>Emparejando canales de comercialización y precios justos</h2>
+                    <div class="highlight-box">
+                        <strong>🎯 Objetivo:</strong> Aprender a identificar canales de comercialización y conceptos clave para vender productos forestales de manera justa y sostenible, basado en el caso de la Cooperativa de Mujeres Forestales de Olancho.
+                        <br><small class="text-muted">Duración estimada: 25 min</small>
+                    </div>
+                    <p style="margin-top: 20px;">Conoce el caso de la <strong>Cooperativa de Mujeres Forestales de Olancho</strong>, que vende subproductos del pino (artesanías, aceites esenciales, abonos orgánicos) en diferentes mercados.</p>
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <h3>🌲 Contexto hondureño</h3>
+                            <p>En Olancho, la tala ilegal afecta miles de hectáreas de bosque. Mujeres organizadas han encontrado en la artesanía y los aceites esenciales una alternativa sostenible que genera ingresos y protege el bosque.</p>
+                            <div class="ejemplo">📌 La Cooperativa ha evitado la tala de más de 200 árboles mediante el aprovechamiento de subproductos.</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>🤝 Comercialización justa</h3>
+                            <p>Venden en ferias locales, a turistas, por WhatsApp, a través de la cooperativa y con intermediarios. Cada canal tiene ventajas, desventajas y formas de asegurar un precio justo.</p>
+                            <div class="ejemplo">💡 El precio justo cubre costos de producción y permite una ganancia digna.</div>
+                        </div>
+                    </div>
+                    <p class="text-center" style="margin-top: 25px;">⬇️ Desliza para conocer el caso completo ⬇️</p>
+                </div>
+
+                <!-- SLIDE 2: CASO COOPERATIVA -->
+                <div class="swiper-slide">
+                    <h2>🌳 La Cooperativa de Mujeres Forestales de Olancho</h2>
+                    <div style="background: #F4ECF7; padding: 18px 22px; border-radius: 14px; border-left: 6px solid var(--morado-principal); margin: 10px 0;">
+                        <p style="font-size: 1.1rem; line-height: 1.7;">"Antes, los árboles solo los veíamos como madera para vender. Ahora sabemos que de ellos podemos obtener mucho más: aceites, artesanías y abono. Y lo mejor, lo hacemos juntas." — <strong>Doña Elena, fundadora</strong></p>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0;">
+                        <div style="flex: 1 1 200px; background: white; padding: 16px; border-radius: 12px; border-top: 4px solid var(--morado-principal);">
+                            <h4 style="color: var(--morado-oscuro);">📦 Productos</h4>
+                            <ul style="font-size: 1rem; margin-left: 1.2rem;">
+                                <li>Artesanías de pino</li>
+                                <li>Aceites esenciales</li>
+                                <li>Abonos orgánicos</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1 1 200px; background: white; padding: 16px; border-radius: 12px; border-top: 4px solid var(--verde-exito);">
+                            <h4 style="color: var(--verde-exito);">🌱 Impacto</h4>
+                            <ul style="font-size: 1rem; margin-left: 1.2rem;">
+                                <li>50 mujeres asociadas</li>
+                                <li>Ingresos para 150 familias</li>
+                                <li>Bosque protegido</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1 1 200px; background: white; padding: 16px; border-radius: 12px; border-top: 4px solid var(--amarillo-suave);">
+                            <h4 style="color: #8a6d00;">⚖️ Desafíos</h4>
+                            <ul style="font-size: 1rem; margin-left: 1.2rem;">
+                                <li>Intermediarios que bajan precios</li>
+                                <li>Falta de acceso a mercados justos</li>
+                                <li>Necesidad de capacitación</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight-box" style="background: #FFF8E1; border-left-color: var(--amarillo-suave);">
+                        💡 <strong>Pregunta clave:</strong> ¿Cómo pueden las mujeres de la cooperativa elegir el mejor canal de venta y asegurar un precio justo?
+                    </div>
+                    <p class="text-center" style="margin-top: 20px;">⬇️ Desliza para empezar la actividad ⬇️</p>
+                </div>
+
+                <!-- SLIDE 3: PREGUNTA 1 - CANALES -->
+                <div class="swiper-slide">
+                    <h2>🧩 Pregunta 1: Canales de comercialización</h2>
+                    <p>¿Cuál es la principal ventaja de vender en <strong>ferias locales</strong>?</p>
+                    <div class="selection-activity">
+                        <div class="selection-question" data-question="1">
+                            <div class="options-grid" data-target="ferias">
+                                <span class="option-item" data-value="correcta">Mayor visibilidad y contacto directo con el cliente</span>
+                                <span class="option-item" data-value="incorrecta">Menor ganancia pero mayor alcance</span>
+                                <span class="option-item" data-value="incorrecta">Precios justos y apoyo mutuo</span>
+                            </div>
+                            <div class="feedback-message" id="feedback1"></div>
+                            <button class="btn-verificar" data-target="ferias">✅ Verificar</button>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.9rem; color: #777; text-align: center;">💡 Haz clic en la tarjeta que consideres correcta y luego en "Verificar".</p>
+                </div>
+
+                <!-- SLIDE 4: PREGUNTA 2 - COOPERATIVA -->
+                <div class="swiper-slide">
+                    <h2>🧩 Pregunta 2: Canales de comercialización</h2>
+                    <p>¿Qué caracteriza a la venta a través de la <strong>cooperativa</strong>?</p>
+                    <div class="selection-activity">
+                        <div class="selection-question" data-question="2">
+                            <div class="options-grid" data-target="cooperativa">
+                                <span class="option-item" data-value="incorrecta">Mayor visibilidad y contacto directo con el cliente</span>
+                                <span class="option-item" data-value="incorrecta">Menor ganancia pero mayor alcance</span>
+                                <span class="option-item" data-value="correcta">Precios justos y apoyo mutuo</span>
+                            </div>
+                            <div class="feedback-message" id="feedback2"></div>
+                            <button class="btn-verificar" data-target="cooperativa">✅ Verificar</button>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.9rem; color: #777; text-align: center;">💡 Haz clic en la tarjeta correcta y presiona "Verificar".</p>
+                </div>
+
+                <!-- SLIDE 5: PREGUNTA 3 - INTERMEDIARIOS -->
+                <div class="swiper-slide">
+                    <h2>🧩 Pregunta 3: Canales de comercialización</h2>
+                    <p>¿Cuál es una desventaja de vender a través de <strong>intermediarios</strong>?</p>
+                    <div class="selection-activity">
+                        <div class="selection-question" data-question="3">
+                            <div class="options-grid" data-target="intermediarios">
+                                <span class="option-item" data-value="incorrecta">Mayor visibilidad y contacto directo con el cliente</span>
+                                <span class="option-item" data-value="correcta">Menor ganancia pero mayor alcance</span>
+                                <span class="option-item" data-value="incorrecta">Precios justos y apoyo mutuo</span>
+                            </div>
+                            <div class="feedback-message" id="feedback3"></div>
+                            <button class="btn-verificar" data-target="intermediarios">✅ Verificar</button>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.9rem; color: #777; text-align: center;">💡 Selecciona la opción correcta y presiona "Verificar".</p>
+                </div>
+
+                <!-- SLIDE 6: PREGUNTA 4 - COSTO TOTAL -->
+                <div class="swiper-slide">
+                    <h2>🧩 Pregunta 4: Conceptos clave</h2>
+                    <p><strong>Costo total</strong> es:</p>
+                    <div class="selection-activity">
+                        <div class="selection-question" data-question="4">
+                            <div class="options-grid" data-target="costo">
+                                <span class="option-item" data-value="correcta">Incluye materiales, mano de obra y tiempo invertido</span>
+                                <span class="option-item" data-value="incorrecta">Diferencia entre precio de venta y costo total</span>
+                                <span class="option-item" data-value="incorrecta">Prioriza el bienestar de la comunidad</span>
+                            </div>
+                            <div class="feedback-message" id="feedback4"></div>
+                            <button class="btn-verificar" data-target="costo">✅ Verificar</button>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.9rem; color: #777; text-align: center;">💡 Selecciona la definición correcta.</p>
+                </div>
+
+                <!-- SLIDE 7: PREGUNTA 5 - MARGEN -->
+                <div class="swiper-slide">
+                    <h2>🧩 Pregunta 5: Conceptos clave</h2>
+                    <p><strong>Margen de ganancia</strong> es:</p>
+                    <div class="selection-activity">
+                        <div class="selection-question" data-question="5">
+                            <div class="options-grid" data-target="margen">
+                                <span class="option-item" data-value="incorrecta">Incluye materiales, mano de obra y tiempo invertido</span>
+                                <span class="option-item" data-value="correcta">Diferencia entre precio de venta y costo total</span>
+                                <span class="option-item" data-value="incorrecta">Prioriza el bienestar de la comunidad</span>
+                            </div>
+                            <div class="feedback-message" id="feedback5"></div>
+                            <button class="btn-verificar" data-target="margen">✅ Verificar</button>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.9rem; color: #777; text-align: center;">💡 Selecciona la definición correcta.</p>
+                </div>
+
+                <!-- SLIDE 8: PREGUNTA 6 - ECONOMÍA SOLIDARIA -->
+                <div class="swiper-slide">
+                    <h2>🧩 Pregunta 6: Conceptos clave</h2>
+                    <p><strong>Economía solidaria</strong> significa:</p>
+                    <div class="selection-activity">
+                        <div class="selection-question" data-question="6">
+                            <div class="options-grid" data-target="solidaria">
+                                <span class="option-item" data-value="incorrecta">Incluye materiales, mano de obra y tiempo invertido</span>
+                                <span class="option-item" data-value="incorrecta">Diferencia entre precio de venta y costo total</span>
+                                <span class="option-item" data-value="correcta">Prioriza el bienestar de la comunidad</span>
+                            </div>
+                            <div class="feedback-message" id="feedback6"></div>
+                            <button class="btn-verificar" data-target="solidaria">✅ Verificar</button>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.9rem; color: #777; text-align: center;">💡 Selecciona la opción correcta.</p>
+                </div>
+
+                <!-- SLIDE 9: PREGUNTA 7 - SITUACIÓN PRÁCTICA -->
+                <div class="swiper-slide">
+                    <h2>🧩 Pregunta 7: Decisión de María</h2>
+                    <p>María recibe una oferta de un intermediario a bajo precio. ¿Qué concepto debe aplicar para asegurar un precio justo?</p>
+                    <div style="background: #F4ECF7; padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <p style="font-weight: 500; color: #4a235a; font-size: 1rem;">📌 "El intermediario le ofrece comprar toda su producción a un precio bajo, pero rápido. María sabe que su costo total es alto por el tiempo y los materiales."</p>
+                    </div>
+                    <div class="selection-activity">
+                        <div class="selection-question" data-question="7">
+                            <div class="options-grid" data-target="justo">
+                                <span class="option-item" data-value="incorrecta">Costo total</span>
+                                <span class="option-item" data-value="correcta">Precio justo</span>
+                                <span class="option-item" data-value="incorrecta">Margen de ganancia</span>
+                                <span class="option-item" data-value="incorrecta">Economía solidaria</span>
+                            </div>
+                            <div class="feedback-message" id="feedback7"></div>
+                            <button class="btn-verificar" data-target="justo">✅ Verificar</button>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.9rem; color: #777; text-align: center;">💡 Selecciona la opción que mejor responda a la situación.</p>
+                </div>
+
+                <!-- SLIDE 10: CIERRE -->
+                <div class="swiper-slide">
+                    <h2>🎉 ¡Actividad completada!</h2>
+                    <div class="highlight-box" style="background: #d5f5e3; border-left-color: #27AE60;">
+                        <strong>✅ Excelente trabajo:</strong> Has practicado cómo elegir canales de comercialización y aplicar conceptos de precio justo, basados en el caso real de la Cooperativa de Mujeres Forestales de Olancho.
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+                        <div style="flex: 1; background: white; padding: 20px; border-radius: 12px; border-top: 5px solid var(--morado-principal); min-width: 200px;">
+                            <h3 style="color: var(--morado-oscuro);">🌳 Impacto en Honduras</h3>
+                            <p>Más de 150 mujeres rurales en Olancho se han organizado en cooperativas para comercializar subproductos del pino, generando ingresos que mejoran la seguridad alimentaria y reducen la presión sobre los bosques.</p>
+                        </div>
+                        <div style="flex: 1; background: white; padding: 20px; border-radius: 12px; border-top: 5px solid var(--verde-exito); min-width: 200px;">
+                            <h3 style="color: var(--verde-exito);">💡 Aprendizaje clave</h3>
+                            <p>Conocer los canales de comercialización y aplicar conceptos como precio justo y economía solidaria permite a las mujeres valorar su trabajo, proteger el bosque y construir comunidades más resilientes.</p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 25px; text-align: center; font-size: 1.2rem;">¡Gracias por participar! Sigue fortaleciendo tu liderazgo emprendedor. 💜</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="nav-bar" id="navBar">
+            <button class="nav-btn" id="prevBtn">◀ Anterior</button>
+            <span class="nav-counter" id="slideCounter">1 / 10</span>
+            <button class="nav-btn" id="nextBtn">Siguiente ▶</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            const splash = document.getElementById('splash');
+            const startBtn = document.getElementById('startBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const progressFill = document.getElementById('progressFill');
+            const slideCounter = document.getElementById('slideCounter');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            const bgm = new Audio(
+                'https://www.dropbox.com/scl/fi/49a75ks3r82xxa0r6oqj1/musica-fondo.mp3?rlkey=1ag90k1gtwxhm6svit2qr6g75&st=chpxf7n1&dl=1'
+            );
+            bgm.loop = true;
+            bgm.volume = 0.2;
+
+            let swiper = null;
+
+            // ---------- SELECCIÓN CON CLIC ----------
+            function initSelection() {
+                document.querySelectorAll('.option-item').forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (this.classList.contains('disabled')) return;
+
+                        const parentGrid = this.closest('.options-grid');
+                        parentGrid.querySelectorAll('.option-item').forEach(opt => {
+                            if (opt !== this) {
+                                opt.classList.remove('selected');
+                            }
+                        });
+                        this.classList.toggle('selected');
+                    });
+                });
+
+                document.querySelectorAll('.btn-verificar').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const target = this.dataset.target;
+                        const parentGrid = document.querySelector(`.options-grid[data-target="${target}"]`);
+                        if (!parentGrid) return;
+
+                        const selected = parentGrid.querySelector('.option-item.selected');
+                        const questionDiv = this.closest('.selection-question');
+                        const feedback = questionDiv.querySelector('.feedback-message');
+
+                        if (!selected) {
+                            mostrarFeedback(feedback, 'error', '⚠️ Por favor, selecciona una opción.');
+                            return;
+                        }
+
+                        const isCorrect = selected.dataset.value === 'correcta';
+
+                        parentGrid.querySelectorAll('.option-item').forEach(opt => {
+                            opt.classList.add('disabled');
+                            if (opt.dataset.value === 'correcta') {
+                                opt.classList.add('correct-answer');
+                            } else {
+                                opt.classList.add('wrong-answer');
+                            }
+                        });
+
+                        if (isCorrect) {
+                            questionDiv.classList.add('correcta');
+                            mostrarFeedback(feedback, 'success', '🎉 ¡Correcto! Bien hecho.');
+                            this.disabled = true;
+                        } else {
+                            mostrarFeedback(feedback, 'error', '❌ No es correcto. La opción correcta se ha marcado en verde.');
+                            this.disabled = true;
+                        }
+                    });
+                });
+            }
+
+            function mostrarFeedback(element, type, message) {
+                if (!element) return;
+                element.className = 'feedback-message ' + type;
+                element.textContent = message;
+                element.style.display = 'block';
+                if (type === 'error') {
+                    setTimeout(() => {
+                        element.style.display = 'none';
+                    }, 5000);
+                }
+            }
+
+            // ---------- PROGRESS ----------
+            function updateProgress(activeIndex, total) {
+                const pct = ((activeIndex + 1) / total) * 100;
+                progressFill.style.width = pct + '%';
+                slideCounter.textContent = (activeIndex + 1) + ' / ' + total;
+
+                if (activeIndex === 0) prevBtn.classList.add('hidden-btn');
+                else prevBtn.classList.remove('hidden-btn');
+
+                if (activeIndex === total - 1) nextBtn.classList.add('hidden-btn');
+                else nextBtn.classList.remove('hidden-btn');
+            }
+
+            function requestFullscreen() {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            }
+
+            function initSwiper() {
+                swiper = new Swiper('.swiper', {
+                    direction: 'horizontal',
+                    loop: false,
+                    on: {
+                        slideChange: function() {
+                            updateProgress(this.activeIndex, this.slides.length);
+                        },
+                        init: function() {
+                            updateProgress(0, this.slides.length);
+                        }
+                    }
+                });
+                prevBtn.onclick = () => swiper.slidePrev();
+                nextBtn.onclick = () => swiper.slideNext();
+            }
+
+            function startPresentation() {
+                requestFullscreen();
+                bgm.play().catch(() => {});
+                splash.classList.add('hidden');
+                closeBtn.style.display = 'block';
+                if (!swiper) {
+                    initSwiper();
+                    initSelection();
+                }
+            }
+
+            function closePresentation() {
+                bgm.pause();
+                bgm.currentTime = 0;
+                splash.classList.remove('hidden');
+                closeBtn.style.display = 'none';
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else if (document.webkitFullscreenElement) {
+                    document.webkitExitFullscreen();
+                } else if (document.msFullscreenElement) {
+                    document.msExitFullscreen();
+                }
+            }
+
+            startBtn.addEventListener('click', startPresentation);
+            closeBtn.addEventListener('click', closePresentation);
+
+        })();
+    </script>
+</body>
+</html>
